@@ -15,6 +15,7 @@ import MintPage from "./pages/Mint";
 import WhitelistPage from "./pages/Whitelist";
 import AnnouncementPage from "./pages/Announcement";
 import ConnectWallet from "./components/wallet/ConnectWallet";
+import Install from "./components/install/Install";
 
 // Context Provider
 import AuthProvider from "./provider/AuthProvider";
@@ -26,6 +27,10 @@ const theme = createTheme({
 });
 
 function App() {
+	if (!window.ethereum) {
+		return <Install />;
+	}
+
 	return (
 		<AuthProvider>
 			<ThemeProvider theme={theme}>

@@ -16,8 +16,6 @@ const AuthProvider = ({ children }) => {
 		checkWalletConnected();
 	}, [pathname]);
 
-	console.log(pathname);
-
 	useEffect(() => {
 		window.ethereum.on("accountsChanged", async () => {
 			navigate("/connect-wallet");
