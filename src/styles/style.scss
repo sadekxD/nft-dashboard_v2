@@ -1,0 +1,41 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	font-family: "Poppins", sans-serif;
+}
+
+button {
+	font-family: "Poppins", sans-serif;
+}
+
+.nav-link {
+	text-decoration: none;
+	color: rgba(0, 0, 0, 0.87);
+
+	&.active {
+		* {
+			color: #017cc0;
+		}
+
+		.nav-item {
+			position: relative;
+			background-color: #fffafa;
+			&::before {
+				content: "";
+				position: absolute;
+				top: 0;
+				left: 0;
+				bottom: 0;
+				width: 6px;
+				border-radius: 0 6px 6px 0;
+				background-color: #017cc0;
+			}
+		}
+	}
+}
