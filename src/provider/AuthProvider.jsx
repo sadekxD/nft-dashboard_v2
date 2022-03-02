@@ -12,9 +12,9 @@ const AuthProvider = ({ children }) => {
 	const [connected, setConnected] = useState(false);
 	const owner = "0xF7A999c5255bA8197425A0756a195a47352C5998";
 
-	// useEffect(() => {
-	// 	checkWalletConnected();
-	// }, [pathname]);
+	useEffect(() => {
+		checkWalletConnected();
+	}, [pathname]);
 
 	console.log(pathname);
 
