@@ -1,22 +1,107 @@
-import { Box, Button, Typography } from "@mui/material";
+import {
+	Backdrop,
+	Box,
+	Button,
+	CircularProgress,
+	Typography,
+} from "@mui/material";
 import PublicSaleDialog from "../components/dialog/PublicSaleDialog";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+
+// React Toastify
+import { toast } from "react-toastify";
+
+// Ether JS
+import { ethers } from "ethers";
+
+// ABI
+import DegenHeroesABI from "../abi/DegenHeroesABI.json";
+
+// Deployed Contract Address
+const contractAddress = "0xABD09f6655143fFA3657287267b2bfE4A84A1F48";
 
 const PublicSale = () => {
 	const [open, setOpen] = useState(false);
+	const [loading, setLoading] = useState(false);
+	const [publicsalePrice, setPublicsalePrice] = useState("");
+	const [value, setValue] = useState("0.1");
+
+	useEffect(() => {
+		_contractStatus();
+	}, []);
 
 	const handleDialogBox = (type = "open") => {
 		type === "open" ? setOpen(true) : setOpen(false);
 	};
 
+	// Get Contract Status
+	const _contractStatus = async () => {
+		const provider = new ethers.providers.Web3Provider(window.ethereum);
+		const signer = provider.getSigner();
+		const contract = new ethers.Contract(
+			contractAddress,
+			DegenHeroesABI,
+			signer
+		);
+
+		const publicsaleCost = await contract.publicsaleCost();
+		setPublicsalePrice(ethers.utils.formatEther(publicsaleCost));
+	};
+
+	const _submit = async (e) => {
+		e.preventDefault();
+
+		const provider = new ethers.providers.Web3Provider(window.ethereum);
+		const signer = provider.getSigner();
+		const contract = new ethers.Contract(
+			contractAddress,
+			DegenHeroesABI,
+			signer
+		);
+
+		try {
+			setLoading(true);
+			const result = await contract.setPublicsaleCost(
+				ethers.utils.parseEther(value)
+			);
+			await result.wait();
+			setLoading(false);
+			toast.success("Change successfull", {
+				position: "bottom-right",
+			});
+			_contractStatus();
+		} catch (err) {
+			setLoading(false);
+			toast.error(err.message, {
+				position: "bottom-right",
+			});
+		}
+	};
+
+	// Handle Publicsale Price
+	const _publicsalePrice = async (e) => {
+		setValue(e.target.value);
+	};
+
 	return (
 		<Box>
-			<PublicSaleDialog open={open} handleDialogbox={handleDialogBox} />
+			<Backdrop
+				sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1000 }}
+				open={loading}
+			>
+				<CircularProgress color="inherit" />
+			</Backdrop>
+			<PublicSaleDialog
+				_submit={_submit}
+				_publicsalePrice={_publicsalePrice}
+				open={open}
+				handleDialogbox={handleDialogBox}
+			/>
 			<Typography variant="h3" fontSize={24} sx={{ fontWeight: 600 }}>
 				Public Sale Price
 			</Typography>
 			<Typography variant="h3" fontSize={70} fontWeight={800} sx={{ mt: 2 }}>
-				0.1 ETH
+				{publicsalePrice} ETH
 			</Typography>
 			<Button
 				variant="contained"

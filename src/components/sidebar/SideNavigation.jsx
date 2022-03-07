@@ -108,21 +108,6 @@ const SideNavigation = () => {
 				title="Whitelist"
 				route="/whitelist"
 			/>
-			<NavigationItem
-				icon={
-					<Box
-						sx={{
-							height: 12,
-							width: 12,
-							backgroundColor: "primary.main",
-							borderRadius: "50%",
-						}}
-					></Box>
-				}
-				sx={{ pl: 4, py: 2 }}
-				title="Mint"
-				route="/mint"
-			/>
 		</List>
 	);
 };

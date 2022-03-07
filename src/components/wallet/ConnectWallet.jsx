@@ -7,7 +7,7 @@ import { toast, ToastContainer } from "react-toastify";
 
 const ConnectWallet = () => {
 	const navigate = useNavigate();
-	const owner = "0xF7A999c5255bA8197425A0756a195a47352C5998";
+	const owner = "0x52dE45262941aA490Ae2Ad9d2781072d30f98c36";
 
 	useEffect(() => {
 		checkWalletConnected();
@@ -19,7 +19,7 @@ const ConnectWallet = () => {
 		const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
 		const { chainId } = await provider.getNetwork();
 		if (accounts.length > 0) {
-			if (chainId === 1) {
+			if (chainId === 4) {
 				if (accounts.includes(owner.toLowerCase())) {
 					return navigate("/");
 				} else {

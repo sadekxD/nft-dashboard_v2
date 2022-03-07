@@ -1,23 +1,102 @@
-import { Typography, Button } from "@mui/material";
+import { Typography, Button, Backdrop, CircularProgress } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PreSaleDialog from "../components/dialog/PreSaleDialog";
+
+// React Toastify
+import { toast } from "react-toastify";
+
+// Ether JS
+import { ethers } from "ethers";
+
+// ABI
+import DegenHeroesABI from "../abi/DegenHeroesABI.json";
+
+// Deployed Contract Address
+const contractAddress = "0xABD09f6655143fFA3657287267b2bfE4A84A1F48";
 
 const PreSale = () => {
 	const [open, setOpen] = useState(false);
+	const [loading, setLoading] = useState(false);
+	const [presalePrice, setPresalePrice] = useState("");
+	const [value, setValue] = useState("0.1");
+
+	useEffect(() => {
+		_contractStatus();
+	}, []);
 
 	const handleDialogBox = (type = "open") => {
 		type === "open" ? setOpen(true) : setOpen(false);
 	};
 
+	// Get Contract Status
+	const _contractStatus = async () => {
+		const provider = new ethers.providers.Web3Provider(window.ethereum);
+		const signer = provider.getSigner();
+		const contract = new ethers.Contract(
+			contractAddress,
+			DegenHeroesABI,
+			signer
+		);
+
+		const presaleCost = await contract.presaleCost();
+		setPresalePrice(ethers.utils.formatEther(presaleCost));
+	};
+
+	const _submit = async (e) => {
+		e.preventDefault();
+
+		const provider = new ethers.providers.Web3Provider(window.ethereum);
+		const signer = provider.getSigner();
+		const contract = new ethers.Contract(
+			contractAddress,
+			DegenHeroesABI,
+			signer
+		);
+
+		try {
+			setLoading(true);
+			const result = await contract.setPresaleCost(
+				ethers.utils.parseEther(value)
+			);
+			await result.wait();
+			setLoading(false);
+			toast.success("Change successfull", {
+				position: "bottom-right",
+			});
+			_contractStatus();
+		} catch (err) {
+			setLoading(false);
+			toast.error(err.message, {
+				position: "bottom-right",
+			});
+		}
+	};
+
+	// Handle Presale Price
+	const _presalePrice = async (e) => {
+		setValue(e.target.value);
+	};
+
 	return (
 		<Box>
-			<PreSaleDialog open={open} handleDialogbox={handleDialogBox} />
+			<PreSaleDialog
+				_submit={_submit}
+				_presalePrice={_presalePrice}
+				open={open}
+				handleDialogbox={handleDialogBox}
+			/>
+			<Backdrop
+				sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1000 }}
+				open={loading}
+			>
+				<CircularProgress color="inherit" />
+			</Backdrop>
 			<Typography variant="h3" fontSize={24} sx={{ fontWeight: 600 }}>
 				Pre Sale Price
 			</Typography>
 			<Typography variant="h3" fontSize={70} fontWeight={800} sx={{ mt: 2 }}>
-				0.1 ETH
+				{presalePrice} ETH
 			</Typography>
 			<Button
 				variant="contained"

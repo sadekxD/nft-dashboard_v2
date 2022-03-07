@@ -11,9 +11,9 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import Header from "../components/header/Header";
 import SideNavigation from "../components/sidebar/SideNavigation";
 import { Button } from "@mui/material";
-import { AuthContext } from "../provider/AuthProvider";
 
 const drawerWidth = 320;
 
@@ -62,8 +62,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 	justifyContent: "flex-end",
 }));
 
-export default function AdminLayout({ children }) {
-	const { owner } = React.useContext(AuthContext);
+export default function TestLayout({ children }) {
 	const theme = useTheme();
 	const [open, setOpen] = React.useState(false);
 
@@ -87,14 +86,7 @@ export default function AdminLayout({ children }) {
 				open={open}
 			>
 				<Toolbar>
-					<Toolbar
-						sx={{
-							height: 80,
-							flex: 1,
-							display: "flex",
-							justifyContent: "space-between",
-						}}
-					>
+					<Toolbar sx={{ height: 80 }}>
 						<IconButton
 							size="large"
 							edge="start"
@@ -134,7 +126,7 @@ export default function AdminLayout({ children }) {
 								color: "rgba(0, 0, 0, .87)",
 							}}
 						>
-							<Typography fontSize={12}>{owner?.slice(0, 18)} ...</Typography>
+							{/* <Typography fontSize={12}>{owner?.slice(0, 18)} ...</Typography> */}
 						</Box>
 					</Toolbar>
 				</Toolbar>
@@ -157,11 +149,7 @@ export default function AdminLayout({ children }) {
 				open={open}
 			>
 				<DrawerHeader>
-					<IconButton
-						size="large"
-						sx={{ color: "#000" }}
-						onClick={handleDrawerClose}
-					>
+					<IconButton onClick={handleDrawerClose}>
 						{theme.direction === "ltr" ? (
 							<ChevronLeftIcon />
 						) : (
@@ -169,6 +157,7 @@ export default function AdminLayout({ children }) {
 						)}
 					</IconButton>
 				</DrawerHeader>
+				<Divider />
 				<Box
 					sx={{
 						height: "calc(100vh - 0px)",

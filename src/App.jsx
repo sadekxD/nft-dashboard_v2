@@ -11,14 +11,15 @@ import AdminLayout from "./layouts/AdminLayout";
 import HomePage from "./pages/Home";
 import PreSalePage from "./pages/PreSale";
 import PublicSalePage from "./pages/PublicSale";
-import MintPage from "./pages/Mint";
 import WhitelistPage from "./pages/Whitelist";
-import AnnouncementPage from "./pages/Announcement";
 import ConnectWallet from "./components/wallet/ConnectWallet";
 import Install from "./components/install/Install";
 
 // Context Provider
 import AuthProvider from "./provider/AuthProvider";
+
+// React Toastify Container
+import { ToastContainer } from "react-toastify";
 
 const theme = createTheme({
 	typography: {
@@ -33,6 +34,7 @@ function App() {
 
 	return (
 		<AuthProvider>
+			<ToastContainer />
 			<ThemeProvider theme={theme}>
 				<Routes>
 					<Route
@@ -57,14 +59,6 @@ function App() {
 						element={
 							<AdminLayout>
 								<PublicSalePage />
-							</AdminLayout>
-						}
-					/>
-					<Route
-						path="/mint"
-						element={
-							<AdminLayout>
-								<MintPage />
 							</AdminLayout>
 						}
 					/>
