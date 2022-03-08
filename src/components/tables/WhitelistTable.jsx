@@ -17,26 +17,6 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import { visuallyHidden } from "@mui/utils";
 
-function createData(sl_no, address, _, minted) {
-	return {
-		sl_no,
-		address,
-		_,
-		minted,
-	};
-}
-
-const rows = [
-	createData(1, "0xFABB0ac9d68B0B445fB7357272Ff202C5651694a", "", false),
-	createData(2, "0xFABB0ac9d68B0B445fB7357272Ff202C5651694a", "", true),
-	createData(3, "0xFABB0ac9d68B0B445fB7357272Ff202C5651694a", "", false),
-	createData(4, "0xFABB0ac9d68B0B445fB7357272Ff202C5651694a", "", true),
-	createData(5, "0xFABB0ac9d68B0B445fB7357272Ff202C5651694a", "", false),
-	createData(6, "0xFABB0ac9d68B0B445fB7357272Ff202C5651694a", "", true),
-	createData(7, "0xFABB0ac9d68B0B445fB7357272Ff202C5651694a", "", false),
-	createData(8, "0xFABB0ac9d68B0B445fB7357272Ff202C5651694a", "", false),
-];
-
 function descendingComparator(a, b, orderBy) {
 	if (b[orderBy] < a[orderBy]) {
 		return -1;
@@ -78,8 +58,6 @@ const headCells = [
 		numeric: false,
 		label: "Wallet Address",
 	},
-	{ id: "minted", numeric: true, label: "Minted" },
-	{ id: "actions", numeric: false, label: "Actions" },
 ];
 
 function EnhancedTableHead(props) {
@@ -158,7 +136,7 @@ EnhancedTableToolbar.propTypes = {
 	numSelected: PropTypes.number.isRequired,
 };
 
-export default function WhitelistTable() {
+export default function WhitelistTable({ rows = [] }) {
 	const [order, setOrder] = React.useState("asc");
 	const [orderBy, setOrderBy] = React.useState("calories");
 	const [selected, setSelected] = React.useState([]);
@@ -278,47 +256,6 @@ export default function WhitelistTable() {
 												sx={{ borderBottom: "2px solid #FCF3F3" }}
 											>
 												{row.address}
-											</TableCell>
-											<TableCell
-												align="left"
-												sx={{ borderBottom: "2px solid #FCF3F3" }}
-											>
-												<Box
-													sx={{
-														borderRadius: 2,
-														backgroundColor: row.minted
-															? "rgba(10, 255, 78, 0.47)"
-															: "rgba(88, 255, 10, .47)",
-														width: "fit-content",
-														fontWeight: 500,
-
-														color: row.minted ? "#3D6805" : "#5CA500",
-														px: 1,
-														py: 0.5,
-														ml: row.minted ? 0.4 : 0,
-													}}
-												>
-													{row.minted ? "True" : "False"}
-												</Box>
-											</TableCell>
-											<TableCell
-												align="left"
-												sx={{ borderBottom: "2px solid #FCF3F3" }}
-											>
-												<Box>
-													<Tooltip title="remove" arrow placement="top">
-														<IconButton
-															sx={{
-																backgroundColor: "rgba(244, 67, 67, 0.53)",
-																"&:hover": {
-																	backgroundColor: "#FF0000",
-																},
-															}}
-														>
-															<DeleteIcon sx={{ color: "#fff" }} />
-														</IconButton>
-													</Tooltip>
-												</Box>
 											</TableCell>
 										</TableRow>
 									);

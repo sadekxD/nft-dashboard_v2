@@ -1,5 +1,5 @@
 import { Box } from "@mui/system";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import AutoAwesomeMosaicIcon from "@mui/icons-material/AutoAwesomeMosaic";
 import {
 	IconButton,
@@ -9,6 +9,7 @@ import {
 	Backdrop,
 	CircularProgress,
 } from "@mui/material";
+import { AuthContext } from "../provider/AuthProvider";
 
 // React Toastify
 import { toast } from "react-toastify";
@@ -19,14 +20,12 @@ import { ethers } from "ethers";
 // ABI
 import DegenHeroesABI from "../abi/DegenHeroesABI.json";
 
-// Deployed Contract Address
-const contractAddress = "0xABD09f6655143fFA3657287267b2bfE4A84A1F48";
-
 const Home = () => {
 	const [paused, setPaused] = useState(false);
 	const [revealed, setRevealed] = useState(false);
 	const [presaleStatus, setPresaleStatus] = useState(false);
 	const [loading, setLoading] = useState(false);
+	const { contractAddress } = useContext(AuthContext);
 
 	useEffect(() => {
 		_contractStatus();

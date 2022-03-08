@@ -6,7 +6,8 @@ import {
 	Typography,
 } from "@mui/material";
 import PublicSaleDialog from "../components/dialog/PublicSaleDialog";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { AuthContext } from "../provider/AuthProvider";
 
 // React Toastify
 import { toast } from "react-toastify";
@@ -17,14 +18,12 @@ import { ethers } from "ethers";
 // ABI
 import DegenHeroesABI from "../abi/DegenHeroesABI.json";
 
-// Deployed Contract Address
-const contractAddress = "0xABD09f6655143fFA3657287267b2bfE4A84A1F48";
-
 const PublicSale = () => {
 	const [open, setOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [publicsalePrice, setPublicsalePrice] = useState("");
 	const [value, setValue] = useState("0.1");
+	const { contractAddress } = useContext(AuthContext);
 
 	useEffect(() => {
 		_contractStatus();

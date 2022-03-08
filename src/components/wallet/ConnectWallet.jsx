@@ -1,13 +1,14 @@
-import { useEffect } from "react";
+import { createContext, useEffect } from "react";
 import { Button, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { ethers } from "ethers";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
+import { AuthContext } from "../../provider/AuthProvider";
 
 const ConnectWallet = () => {
 	const navigate = useNavigate();
-	const owner = "0x52dE45262941aA490Ae2Ad9d2781072d30f98c36";
+	const { owner } = createContext(AuthContext);
 
 	useEffect(() => {
 		checkWalletConnected();

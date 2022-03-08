@@ -6,14 +6,22 @@ import CssBaseline from "@mui/material/CssBaseline";
 import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import SideNavigation from "../components/sidebar/SideNavigation";
-import { Button } from "@mui/material";
+import { Backdrop, Button, CircularProgress } from "@mui/material";
 import { AuthContext } from "../provider/AuthProvider";
+
+// React Toastify
+import { toast } from "react-toastify";
+
+// Ether Js
+import { ethers } from "ethers";
+
+// ABI
+import DegenHeroesABI from "../abi/DegenHeroesABI.json";
 
 const drawerWidth = 320;
 
@@ -63,9 +71,23 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function AdminLayout({ children }) {
-	const { owner } = React.useContext(AuthContext);
+	const { owner, contractAddress } = React.useContext(AuthContext);
 	const theme = useTheme();
 	const [open, setOpen] = React.useState(false);
+	const [loading, setLoading] = React.useState(false);
+
+	React.useEffect(() => {
+		const _resize = () => {
+			if (window.innerWidth >= 1200) {
+				setOpen(true);
+			} else {
+				setOpen(false);
+			}
+		};
+
+		window.addEventListener("load", _resize);
+		window.addEventListener("resize", _resize);
+	}, []);
 
 	const handleDrawerOpen = () => {
 		setOpen(true);
@@ -75,8 +97,40 @@ export default function AdminLayout({ children }) {
 		setOpen(false);
 	};
 
+	// Widraw Funds
+	const _withdraw = async () => {
+		const provider = new ethers.providers.Web3Provider(window.ethereum);
+		const signer = provider.getSigner();
+		const contract = new ethers.Contract(
+			contractAddress,
+			DegenHeroesABI,
+			signer
+		);
+
+		try {
+			setLoading(true);
+			const result = await contract.withDraw();
+			await result.wait();
+			setLoading(false);
+			toast.success("Funds withdraw successful", {
+				position: "bottom-right",
+			});
+		} catch (err) {
+			setLoading(false);
+			toast.error(err.message, {
+				position: "bottom-right",
+			});
+		}
+	};
+
 	return (
 		<Box sx={{ display: "flex" }}>
+			<Backdrop
+				sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+				open={loading}
+			>
+				<CircularProgress color="inherit" />
+			</Backdrop>
 			<CssBaseline />
 			<AppBar
 				position="fixed"
@@ -203,6 +257,7 @@ export default function AdminLayout({ children }) {
 							mx: "auto",
 							textTransform: "capitalize",
 						}}
+						onClick={_withdraw}
 					>
 						Withdraw Funds
 					</Button>

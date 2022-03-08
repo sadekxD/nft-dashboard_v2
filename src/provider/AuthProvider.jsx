@@ -10,7 +10,8 @@ const AuthProvider = ({ children }) => {
 	const { pathname } = useLocation();
 
 	const [connected, setConnected] = useState(false);
-	const owner = "0xF7A999c5255bA8197425A0756a195a47352C5998";
+	const owner = "0xB6aa5D4d08D74705d7bc4ce3a3b6E58aAE92121F";
+	const contractAddress = "0x3Be229cc191d08dCf9737646cb89C0604eBB7b54";
 
 	useEffect(() => {
 		checkWalletConnected();
@@ -44,7 +45,9 @@ const AuthProvider = ({ children }) => {
 	};
 
 	return (
-		<AuthContext.Provider value={{ owner, connected, setConnected }}>
+		<AuthContext.Provider
+			value={{ owner, connected, setConnected, contractAddress }}
+		>
 			{children}
 		</AuthContext.Provider>
 	);

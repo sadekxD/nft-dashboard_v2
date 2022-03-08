@@ -1,6 +1,6 @@
 import { Typography, Button, Backdrop, CircularProgress } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PreSaleDialog from "../components/dialog/PreSaleDialog";
 
 // React Toastify
@@ -11,15 +11,14 @@ import { ethers } from "ethers";
 
 // ABI
 import DegenHeroesABI from "../abi/DegenHeroesABI.json";
-
-// Deployed Contract Address
-const contractAddress = "0xABD09f6655143fFA3657287267b2bfE4A84A1F48";
+import { AuthContext } from "../provider/AuthProvider";
 
 const PreSale = () => {
 	const [open, setOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [presalePrice, setPresalePrice] = useState("");
 	const [value, setValue] = useState("0.1");
+	const { contractAddress } = useContext(AuthContext);
 
 	useEffect(() => {
 		_contractStatus();
