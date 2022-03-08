@@ -188,7 +188,7 @@ export default function AdminLayout({ children }) {
 								color: "rgba(0, 0, 0, .87)",
 							}}
 						>
-							<Typography fontSize={12}>{owner?.slice(0, 18)} ...</Typography>
+							<Typography fontSize={12}>{owner?.slice(0, 14)} ...</Typography>
 						</Box>
 					</Toolbar>
 				</Toolbar>
